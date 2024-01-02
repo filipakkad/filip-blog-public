@@ -130,7 +130,7 @@
               pl-6 relative block leading-[150%]
               after:absolute after:content-[''] after:w-2 after:h-full after:top-0 after:left-0 after:bg-primary-green
             " data-astro-cid-scuu7fyy> OAuth2.0 with R/Shiny and Databricks </span> </h1> <div class="flex gap-3 mb-3 items-center"> <div class="h-11 aspect-square rounded-full overflow-hidden"> <img src="/assets/asset.PGwsuqgK_1lJpIL.webp" class="h-full w-full rounded-full m-0 object-cover" alt="Filip's photo" width="150" height="200" loading="lazy" decoding="async"> </div> <div class="flex flex-col gap-1"> <a href="/" class="!bg-none animated-link"><h4 class="m-0 leading-[1]">Filip Akkad</h4></a>  <time class="block text-text-muted text-sm" data-astro-cid-scuu7fyy>Dec 27, 2023</time>  </div> </div>  </div> <p>I am going to write a blog post about how to integrate RStudio workbench with Databricks using oauth2.0.</p>
-<h2 id="tldr">TL;DR</h2>
+<h2 id="tldr"><a href="#tldr">TL;DR</a></h2>
 <ol>
 <li>Install <code>Databricks CLI</code></li>
 <li>Register custom application in <code>Databricks</code></li>
@@ -139,20 +139,20 @@
 <li>Use <code>Databricks</code> API to fetch data from <code>Databricks</code> workspace</li>
 <li>Display data in <code>Shiny</code> application</li>
 </ol>
-<h2 id="what-is-databrics">What is <code>Databrics</code>?</h2>
+<h2 id="what-is-databrics"><a href="#what-is-databrics">What is <code>Databrics</code>?</a></h2>
 <p><code>Databricks</code> is a company founded by the original creators of <code>Apache Spark</code>. <code>Databricks</code> grew out of the <code>AMPlab</code> project at <code>UC Berkeley</code>, which was involved in making <code>Apache Spark</code>, an open-source distributed computing framework built atop <code>Scala</code> and <code>Apache Mesos</code>.</p>
-<h2 id="why-to-authenthicate-with-oauth-in-databricks-in-simple-terms-comparing-to-pat">Why to authenthicate with OAuth in Databricks? In simple terms, comparing to PAT</h2>
+<h2 id="why-to-authenthicate-with-oauth-in-databricks-in-simple-terms-comparing-to-pat"><a href="#why-to-authenthicate-with-oauth-in-databricks-in-simple-terms-comparing-to-pat">Why to authenthicate with OAuth in Databricks? In simple terms, comparing to PAT</a></h2>
 <p><code>Databricks</code> supports two types of authentication: <code>OAuth 2.0</code> and <code>Personal Access Token (PAT)</code>. <code>OAuth 2.0</code> is the recommended authentication method. <code>OAuth 2.0</code> is an industry-standard protocol for authorization. It enables third-party applications to obtain limited access to <code>HTTP</code> services, either on behalf of a resource owner or by allowing a third-party application to obtain access on its own behalf. <code>OAuth 2.0</code> is a more secure method of authentication than <code>PAT</code> because it enables you to control the level of access that third-party applications have to your <code>Databricks</code> resources. <code>OAuth 2.0</code> also enables you to revoke access to your <code>Databricks</code> resources at any time.</p>
-<h2 id="pre-requisites">Pre-requisites</h2>
+<h2 id="pre-requisites"><a href="#pre-requisites">Pre-requisites</a></h2>
 <ol>
 <li><code>R/Shiny</code></li>
 <li><code>Python</code> (will be used by <code>reticulate</code> package)</li>
 <li>Access to <code>Databricks</code> account + running workspace</li>
 </ol>
 <p>Are you ready? Let’s go!</p>
-<h2 id="install-databricks-cli---link">Install Databricks CLI - link</h2>
-<h2 id="register-custom-application-in-databricks">Register custom application in Databricks</h2>
-<h2 id="initialize-shiny-application">Initialize Shiny application</h2>
+<h2 id="install-databricks-cli---link"><a href="#install-databricks-cli---link">Install Databricks CLI - link</a></h2>
+<h2 id="register-custom-application-in-databricks"><a href="#register-custom-application-in-databricks">Register custom application in Databricks</a></h2>
+<h2 id="initialize-shiny-application"><a href="#initialize-shiny-application">Initialize Shiny application</a></h2>
 <figure data-rehype-pretty-code-figure=""><figcaption data-rehype-pretty-code-title="" data-language="r" data-theme="github-dark-dimmed">app.r</figcaption><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="r" data-theme="github-dark-dimmed"><code data-line-numbers="" data-language="r" data-theme="github-dark-dimmed" style="display: grid;" data-line-numbers-max-digits="2"><span data-line=""><span style="color:#6CB6FF">library</span><span style="color:#ADBAC7">(shiny)</span></span>
 <span data-line=""> </span>
 <span data-line=""><span style="color:#ADBAC7">ui </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> fluidPage</span><span style="color:#ADBAC7">(</span></span>
