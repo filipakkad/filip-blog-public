@@ -153,7 +153,7 @@
 <span data-line=""><span style="color:#F69D50">shinyApp</span><span style="color:#ADBAC7">(ui, server, </span><span style="color:#F69D50">options</span><span style="color:#F47067"> =</span><span style="color:#F47067"> list</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">port</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> 4444</span><span style="color:#ADBAC7">))</span></span></code></pre></figure>
 <p>However, this seemingly straightforward approach harbors inherent security risks.
 The issue with the provided code lies in the unrestricted access it grants to the asset once enabled. Even without initiating a new session in Shiny, external users can access the file. For instance, opening the following link in a separate incognito browser tab:</p>
-<p><code>http://localhost:4444/assets/sample.pdf</code></p>
+<figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="text" data-theme="github-dark-dimmed"><code data-language="text" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span>http://localhost:4444/assets/sample.pdf</span></span></code></pre></figure>
 <p>reveals a serious security vulnerability.</p>
 <p><img alt="app_1"  src="/assets/asset.TFdSWqN8_Z2aaVSl.webp" width="1140" height="496" loading="lazy" decoding="async"></p>
 <h2 id="safer-alternative-endpoint-with-session-token"><a href="#safer-alternative-endpoint-with-session-token">Safer Alternative: Endpoint with Session Token</a></h2>
@@ -205,12 +205,13 @@ The issue with the provided code lies in the unrestricted access it grants to th
 <span data-line=""><span style="color:#F69D50">shinyApp</span><span style="color:#ADBAC7">(ui, server)</span></span></code></pre></figure>
 <p>The crucial element here is <code>session$registerDataObj</code>, which registers a new endpoint and efficiently serves the specified data. In this instance, the data is a binary PDF file, and its accessibility is confined to the associated session, thereby enhancing the overall security of the Shiny application.</p>
 <h2 id="but"><a href="#but">But..?</a></h2>
-<p>Although our PDF delivery mechanism in <code>app_2.r</code> is significantly more secure, there remains an security gap that requires attention.</p>
+<p>Although our PDF delivery mechanism in <code>app_2.r</code> is significantly more secure, there remains a security gap that requires attention.</p>
 <p>To demonstrate this, execute the <code>app_2.r</code> script and copy the generated link from the top. Now, open a separate incognito tab and paste the link – voila, the PDF is accessible for an anonymous user. This scenario is far from ideal, especially when dealing with highly sensitive files.</p>
 <p><img alt="app_2"  src="/assets/asset.T0kHrb8N_Z1RF1H9.webp" width="1140" height="496" loading="lazy" decoding="async"></p>
-<p>As observed, sharing the link (or more precisely, the session token embedded within it) poses a security risk. Session tokens should be considered a secret. What if the link is accidentally shared or falls into the wrong hands? As I shown the recipient gains immediate access to the file. While there are serious mitigators of the risks (see a discussion - <a href="https://github.com/rstudio/shiny/issues/3748">https://github.com/rstudio/shiny/issues/3748</a>) + the link only functioning within the duration of the open session, there is still a room for improvement.👇</p>
+<p>As observed, sharing the link (or more precisely, the session token embedded within it) poses a security risk. Session tokens should be considered a secret. What if the link is accidentally shared or falls into the wrong hands? The recipient gains immediate access to the file.
+While there are significant mitigators of the risks (see a <a href="https://github.com/rstudio/shiny/issues/3748">discussion</a>) + the link only functioning within the duration of the open session, there is still a room for improvement.👇</p>
 <blockquote>
-<p><strong>At the time of writing this blog an open PR from Joe Cheng addresses this vulnerability - <a href="https://github.com/rstudio/shiny/pull/3766">https://github.com/rstudio/shiny/pull/3766</a>.</strong></p>
+<p><strong>At the time of writing this blog an open PR from Joe Cheng addresses this vulnerability - <a href="https://github.com/rstudio/shiny/pull/3766">PR-3766</a>.</strong></p>
 </blockquote>
 <p>In the interim, you can explore my app-level implementation designed to tackle this issue. Although this solution may become obsolete once the aforementioned PR is merged, I still consider it a worthwhile experiment to implement it independently. 👇</p>
 <hr>
@@ -386,6 +387,7 @@ Think of it as a two-factor authentication mechanism, where the session URL is t
 <p>Now, try to open the link in a separate incognito tab. If you see error 403 (or a ‘not this time my friend’ message 😁) it means that the token is invalid 👉 we’re good to go!
 <img alt="app_3"  src="/assets/asset.4BXDtO_E_Z2VEMt.webp" width="1140" height="496" loading="lazy" decoding="async"></p>
 <h2 id="conclusion"><a href="#conclusion">Conclusion</a></h2>
-<p>In conclusion, this post delved into the security challenges linked with serving assets in Shiny apps and presented effective mitigation strategies. The least secure method, utilizing <code>addResourcePath</code>, opens the door to unrestricted access to assets. A more robust alternative is establishing a dedicated endpoint within Shiny, limiting asset access to specific sessions.</p>
+<p>In conclusion, this post delved into the security challenges linked with serving assets in Shiny apps and presented effective mitigation strategies.
+The least secure method, utilizing <code>addResourcePath</code>, opens the door to unrestricted access to assets. A more robust alternative is establishing a dedicated endpoint within Shiny, limiting asset access to specific sessions.</p>
 <p>However, a security gap persists in this approach, as a leaked link could be exploited by unauthorized users. This issue is currently under consideration in an open <a href="https://github.com/rstudio/shiny/pull/3766">Pull Request</a>. Until the proposed changes are incorporated, we can address this vulnerability by implementing a system that utilizes JSON Web Tokens (JWTs) to generate session access tokens. This final solution markedly improves security, rendering a leaked asset link insufficient for unauthorized data retrieval. Thus, we ensure that assets are exclusively served for the duration of a specific session to the browser that initiated it.</p> </section> </main> <footer class="text-sm leading-[1.75] mt-4" data-astro-cid-sz7xmlte> <p client:visible data-astro-cid-sz7xmlte>
 All rights reserved © Filip Akkad 2024 </p> </footer>   </body> </html>
