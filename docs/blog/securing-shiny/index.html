@@ -270,15 +270,21 @@ While there are significant mitigators of the risks (see a <a href="https://gith
 <p>The general idea is to generate a token for each session and store it in the browser as a cookie. Then, when the user requests the asset, the token is sent to the server, which validates it and serves the asset if the token is valid.
 Think of it as a two-factor authentication mechanism, where the session URL is the first factor, and the JWT token is the second factor.</p>
 <p>Comparing to <code>app_2.r</code> we need to introduce couple of helper functions first:</p>
-<figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="r" data-theme="github-dark-dimmed"><code data-language="r" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#6CB6FF">Sys.setenv</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">SHINY_SALT</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> 'salt&#x26;pepper'</span><span style="color:#ADBAC7">)</span></span></code></pre></figure>
-<p>We need to set a salt for the JWT token. The salt is used to generate a unique token for each session. The salt should be a secret and should be different for each Shiny application.</p>
+<figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="r" data-theme="github-dark-dimmed"><code data-language="r" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#6CB6FF">Sys.setenv</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">SHINY_PEPPER</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> 'pepper'</span><span style="color:#ADBAC7">)</span></span></code></pre></figure>
+<p>We need to set a so called <code>pepper</code> for the JWT token. The pepper is used to generate a unique token for each application. The pepper should be a secret and should be different for each Shiny application.</p>
+<figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="r" data-theme="github-dark-dimmed"><code data-language="r" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#DCBDFB">get_secret</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">pepper</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_PEPPER'</span><span style="color:#ADBAC7">), salt, token) {</span></span>
+<span data-line=""><span style="color:#6CB6FF">  paste0</span><span style="color:#ADBAC7">(pepper, salt, token)</span></span>
+<span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
+<p>There is also a <code>salt</code> - a random value that is used to generate a unique token for each session. The salt should be different for each session. In this example, we’re using a random value, but you can use any other value that is unique for each session.</p>
+<hr>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="r" data-theme="github-dark-dimmed"><code data-language="r" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#DCBDFB">generate_session_jwt</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(</span></span>
 <span data-line=""><span style="color:#ADBAC7">    session_token,</span></span>
-<span data-line=""><span style="color:#F69D50">    salt</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_SALT'</span><span style="color:#ADBAC7">))</span></span>
-<span data-line=""><span style="color:#ADBAC7">{</span></span>
-<span data-line=""><span style="color:#F69D50">  modified_session_token</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> paste0</span><span style="color:#ADBAC7">(salt, session_token);</span></span>
-<span data-line=""><span style="color:#ADBAC7">  key </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> paste0</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'session_'</span><span style="color:#ADBAC7">,</span><span style="color:#6CB6FF">digest</span><span style="color:#F47067">::</span><span style="color:#F69D50">digest</span><span style="color:#ADBAC7">(modified_session_token))</span></span>
-<span data-line=""><span style="color:#ADBAC7">  token </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> jose</span><span style="color:#F47067">::</span><span style="color:#F69D50">jwt_encode_hmac</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">secret</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> modified_session_token)</span></span>
+<span data-line=""><span style="color:#F69D50">    pepper</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_PEPPER'</span><span style="color:#ADBAC7">),</span></span>
+<span data-line=""><span style="color:#ADBAC7">    salt</span></span>
+<span data-line=""><span style="color:#ADBAC7">) {</span></span>
+<span data-line=""><span style="color:#F69D50">  modified_session_token</span><span style="color:#F47067"> =</span><span style="color:#F69D50"> get_secret</span><span style="color:#ADBAC7">(pepper, salt, session_token);</span></span>
+<span data-line=""><span style="color:#ADBAC7">  key </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> paste0</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'session_'</span><span style="color:#ADBAC7">, </span><span style="color:#6CB6FF">digest</span><span style="color:#F47067">::</span><span style="color:#F69D50">digest</span><span style="color:#ADBAC7">(modified_session_token))</span></span>
+<span data-line=""><span style="color:#ADBAC7">  token </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> jwt_encode_hmac</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">secret</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> modified_session_token)</span></span>
 <span data-line=""><span style="color:#F47067">  list</span><span style="color:#ADBAC7">(</span></span>
 <span data-line=""><span style="color:#F69D50">    key</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> key,</span></span>
 <span data-line=""><span style="color:#F69D50">    token</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> token</span></span>
@@ -289,14 +295,15 @@ Think of it as a two-factor authentication mechanism, where the session URL is t
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="r" data-theme="github-dark-dimmed"><code data-language="r" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#DCBDFB">validate_session_jwt</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(</span></span>
 <span data-line=""><span style="color:#ADBAC7">    token,</span></span>
 <span data-line=""><span style="color:#ADBAC7">    session_token,</span></span>
-<span data-line=""><span style="color:#F69D50">    salt</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_SALT'</span><span style="color:#ADBAC7">)</span></span>
+<span data-line=""><span style="color:#F69D50">    pepper</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_PEPPER'</span><span style="color:#ADBAC7">),</span></span>
+<span data-line=""><span style="color:#ADBAC7">    salt</span></span>
 <span data-line=""><span style="color:#ADBAC7">) {</span></span>
-<span data-line=""><span style="color:#6CB6FF">  jose</span><span style="color:#F47067">::</span><span style="color:#F69D50">jwt_decode_hmac</span><span style="color:#ADBAC7">(token, </span><span style="color:#6CB6FF">paste0</span><span style="color:#ADBAC7">(salt, session_token))</span></span>
+<span data-line=""><span style="color:#F69D50">  jwt_decode_hmac</span><span style="color:#ADBAC7">(token, </span><span style="color:#F69D50">get_secret</span><span style="color:#ADBAC7">(pepper, salt, session_token))</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
 <p><code>validate_session_jwt</code> throws an error if the token is invalid.</p>
 <hr>
-<figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="r" data-theme="github-dark-dimmed"><code data-language="r" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#DCBDFB">set_token</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(session, </span><span style="color:#F69D50">salt</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_SALT'</span><span style="color:#ADBAC7">)) {</span></span>
-<span data-line=""><span style="color:#ADBAC7">  token_obj </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> generate_session_jwt</span><span style="color:#ADBAC7">(session</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">token, salt)</span></span>
+<figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="r" data-theme="github-dark-dimmed"><code data-language="r" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#DCBDFB">set_token</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(session, </span><span style="color:#F69D50">pepper</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_PEPPER'</span><span style="color:#ADBAC7">), salt) {</span></span>
+<span data-line=""><span style="color:#ADBAC7">  token_obj </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> generate_session_jwt</span><span style="color:#ADBAC7">(session</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">token, pepper, salt)</span></span>
 <span data-line=""><span style="color:#ADBAC7">  session</span><span style="color:#F47067">$</span><span style="color:#F69D50">sendCustomMessage</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">"token"</span><span style="color:#ADBAC7">, token_obj)</span></span>
 <span data-line=""><span style="color:#ADBAC7">  token_obj</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
@@ -330,86 +337,94 @@ Think of it as a two-factor authentication mechanism, where the session URL is t
 <p><code>parse_cookies</code> is used in the <code>filterFunc</code> to extract the token from the request and returns a named list of cookies.</p>
 <p>The final code looks like this:</p>
 <figure data-rehype-pretty-code-figure=""><figcaption data-rehype-pretty-code-title="" data-language="r" data-theme="github-dark-dimmed">app_3.r</figcaption><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="r" data-theme="github-dark-dimmed"><code data-line-numbers="" data-language="r" data-theme="github-dark-dimmed" style="display: grid;" data-line-numbers-max-digits="3"><span data-line=""><span style="color:#6CB6FF">library</span><span style="color:#ADBAC7">(shiny)</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#6CB6FF">library</span><span style="color:#ADBAC7">(jose)</span></span>
-<span data-line="" data-highlighted-line=""> </span>
-<span data-line="" data-highlighted-line=""><span style="color:#6CB6FF">Sys.setenv</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">SHINY_SALT</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> 'salt&#x26;pepper'</span><span style="color:#ADBAC7">)</span></span>
-<span data-line="" data-highlighted-line=""> </span>
-<span data-line="" data-highlighted-line=""><span style="color:#DCBDFB">generate_session_jwt</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">    session_token,</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F69D50">    salt</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_SALT'</span><span style="color:#ADBAC7">))</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">{</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F69D50">  modified_session_token</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> paste0</span><span style="color:#ADBAC7">(salt, session_token);</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  key </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> paste0</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'session_'</span><span style="color:#ADBAC7">,</span><span style="color:#6CB6FF">digest</span><span style="color:#F47067">::</span><span style="color:#F69D50">digest</span><span style="color:#ADBAC7">(modified_session_token))</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  token </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> jwt_encode_hmac</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">secret</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> modified_session_token)</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F47067">  list</span><span style="color:#ADBAC7">(</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F69D50">    key</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> key,</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F69D50">    token</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> token</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  )</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">}</span></span>
-<span data-line="" data-highlighted-line=""> </span>
-<span data-line="" data-highlighted-line=""><span style="color:#DCBDFB">validate_session_jwt</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">    token,</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">    session_token,</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F69D50">    salt</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_SALT'</span><span style="color:#ADBAC7">)</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">) {</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F69D50">  jwt_decode_hmac</span><span style="color:#ADBAC7">(token, </span><span style="color:#6CB6FF">paste0</span><span style="color:#ADBAC7">(salt, session_token))</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">}</span></span>
-<span data-line="" data-highlighted-line=""> </span>
-<span data-line="" data-highlighted-line=""><span style="color:#DCBDFB">add_token_handler</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">() {</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  tags</span><span style="color:#F47067">$</span><span style="color:#F69D50">script</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">"</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#96D0FF">      import 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js';</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#96D0FF">      Shiny.addCustomMessageHandler('token', function({key, token}) {</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#96D0FF">        Cookies.set(key, token);</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#96D0FF">      })</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#96D0FF">    "</span><span style="color:#ADBAC7">,</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F69D50">    type</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> "module"</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  )</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">}</span></span>
-<span data-line="" data-highlighted-line=""> </span>
-<span data-line="" data-highlighted-line=""><span style="color:#DCBDFB">set_token</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(session, </span><span style="color:#F69D50">salt</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_SALT'</span><span style="color:#ADBAC7">)) {</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  token_obj </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> generate_session_jwt</span><span style="color:#ADBAC7">(session</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">token, salt)</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  session</span><span style="color:#F47067">$</span><span style="color:#F69D50">sendCustomMessage</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">"token"</span><span style="color:#ADBAC7">, token_obj)</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  token_obj</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">}</span></span>
-<span data-line="" data-highlighted-line=""> </span>
-<span data-line="" data-highlighted-line=""><span style="color:#DCBDFB">parse_cookies</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(cookie_string) {</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  cookies </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> strsplit</span><span style="color:#ADBAC7">(cookie_string, </span><span style="color:#96D0FF">";"</span><span style="color:#ADBAC7">)[[</span><span style="color:#6CB6FF">1</span><span style="color:#ADBAC7">]]</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#6CB6FF">  Reduce</span><span style="color:#ADBAC7">(</span><span style="color:#F47067">function</span><span style="color:#ADBAC7">(prev, curr) {</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">    cookie </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> strsplit</span><span style="color:#ADBAC7">(curr, </span><span style="color:#96D0FF">'='</span><span style="color:#ADBAC7">)[[</span><span style="color:#6CB6FF">1</span><span style="color:#ADBAC7">]]</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">    key </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> trimws</span><span style="color:#ADBAC7">(cookie[</span><span style="color:#6CB6FF">1</span><span style="color:#ADBAC7">])</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">    value </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> trimws</span><span style="color:#ADBAC7">(cookie[</span><span style="color:#6CB6FF">2</span><span style="color:#ADBAC7">])</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">    prev[[key]] </span><span style="color:#F47067">&#x3C;-</span><span style="color:#ADBAC7"> value</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">    prev</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  }, cookies, </span><span style="color:#F69D50">init</span><span style="color:#F47067"> =</span><span style="color:#F47067"> list</span><span style="color:#ADBAC7">())</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">}</span></span>
+<span data-line=""><span style="color:#6CB6FF">library</span><span style="color:#ADBAC7">(jose)</span></span>
+<span data-line=""> </span>
+<span data-line=""><span style="color:#6CB6FF">Sys.setenv</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">SHINY_PEPPER</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> 'pepper'</span><span style="color:#ADBAC7">)</span></span>
+<span data-line=""> </span>
+<span data-line=""><span style="color:#DCBDFB">get_secret</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">pepper</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_PEPPER'</span><span style="color:#ADBAC7">), salt, token) {</span></span>
+<span data-line=""><span style="color:#6CB6FF">  paste0</span><span style="color:#ADBAC7">(pepper, salt, token)</span></span>
+<span data-line=""><span style="color:#ADBAC7">}</span></span>
+<span data-line=""> </span>
+<span data-line=""><span style="color:#DCBDFB">generate_session_jwt</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(</span></span>
+<span data-line=""><span style="color:#ADBAC7">    session_token,</span></span>
+<span data-line=""><span style="color:#F69D50">    pepper</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_PEPPER'</span><span style="color:#ADBAC7">),</span></span>
+<span data-line=""><span style="color:#ADBAC7">    salt</span></span>
+<span data-line=""><span style="color:#ADBAC7">) {</span></span>
+<span data-line=""><span style="color:#F69D50">  modified_session_token</span><span style="color:#F47067"> =</span><span style="color:#F69D50"> get_secret</span><span style="color:#ADBAC7">(pepper, salt, session_token);</span></span>
+<span data-line=""><span style="color:#ADBAC7">  key </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> paste0</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'session_'</span><span style="color:#ADBAC7">, </span><span style="color:#6CB6FF">digest</span><span style="color:#F47067">::</span><span style="color:#F69D50">digest</span><span style="color:#ADBAC7">(modified_session_token))</span></span>
+<span data-line=""><span style="color:#ADBAC7">  token </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> jwt_encode_hmac</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">secret</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> modified_session_token)</span></span>
+<span data-line=""><span style="color:#F47067">  list</span><span style="color:#ADBAC7">(</span></span>
+<span data-line=""><span style="color:#F69D50">    key</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> key,</span></span>
+<span data-line=""><span style="color:#F69D50">    token</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> token</span></span>
+<span data-line=""><span style="color:#ADBAC7">  )</span></span>
+<span data-line=""><span style="color:#ADBAC7">}</span></span>
+<span data-line=""> </span>
+<span data-line=""><span style="color:#DCBDFB">validate_session_jwt</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(</span></span>
+<span data-line=""><span style="color:#ADBAC7">    token,</span></span>
+<span data-line=""><span style="color:#ADBAC7">    session_token,</span></span>
+<span data-line=""><span style="color:#F69D50">    pepper</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_PEPPER'</span><span style="color:#ADBAC7">),</span></span>
+<span data-line=""><span style="color:#ADBAC7">    salt</span></span>
+<span data-line=""><span style="color:#ADBAC7">) {</span></span>
+<span data-line=""><span style="color:#F69D50">  jwt_decode_hmac</span><span style="color:#ADBAC7">(token, </span><span style="color:#F69D50">get_secret</span><span style="color:#ADBAC7">(pepper, salt, session_token))</span></span>
+<span data-line=""><span style="color:#ADBAC7">}</span></span>
+<span data-line=""> </span>
+<span data-line=""><span style="color:#DCBDFB">add_token_handler</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">() {</span></span>
+<span data-line=""><span style="color:#ADBAC7">  tags</span><span style="color:#F47067">$</span><span style="color:#F69D50">script</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">"</span></span>
+<span data-line=""><span style="color:#96D0FF">      import 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js';</span></span>
+<span data-line=""><span style="color:#96D0FF">      Shiny.addCustomMessageHandler('token', function({key, token}) {</span></span>
+<span data-line=""><span style="color:#96D0FF">        Cookies.set(key, token);</span></span>
+<span data-line=""><span style="color:#96D0FF">      })</span></span>
+<span data-line=""><span style="color:#96D0FF">    "</span><span style="color:#ADBAC7">,</span></span>
+<span data-line=""><span style="color:#F69D50">    type</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> "module"</span></span>
+<span data-line=""><span style="color:#ADBAC7">  )</span></span>
+<span data-line=""><span style="color:#ADBAC7">}</span></span>
+<span data-line=""> </span>
+<span data-line=""><span style="color:#DCBDFB">set_token</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(session, </span><span style="color:#F69D50">pepper</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_PEPPER'</span><span style="color:#ADBAC7">), salt) {</span></span>
+<span data-line=""><span style="color:#ADBAC7">  token_obj </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> generate_session_jwt</span><span style="color:#ADBAC7">(session</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">token, pepper, salt)</span></span>
+<span data-line=""><span style="color:#ADBAC7">  session</span><span style="color:#F47067">$</span><span style="color:#F69D50">sendCustomMessage</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">"token"</span><span style="color:#ADBAC7">, token_obj)</span></span>
+<span data-line=""><span style="color:#ADBAC7">  token_obj</span></span>
+<span data-line=""><span style="color:#ADBAC7">}</span></span>
+<span data-line=""> </span>
+<span data-line=""><span style="color:#DCBDFB">parse_cookies</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(cookie_string) {</span></span>
+<span data-line=""><span style="color:#ADBAC7">  cookies </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> strsplit</span><span style="color:#ADBAC7">(cookie_string, </span><span style="color:#96D0FF">";"</span><span style="color:#ADBAC7">)[[</span><span style="color:#6CB6FF">1</span><span style="color:#ADBAC7">]]</span></span>
+<span data-line=""><span style="color:#6CB6FF">  Reduce</span><span style="color:#ADBAC7">(</span><span style="color:#F47067">function</span><span style="color:#ADBAC7">(prev, curr) {</span></span>
+<span data-line=""><span style="color:#ADBAC7">    cookie </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> strsplit</span><span style="color:#ADBAC7">(curr, </span><span style="color:#96D0FF">'='</span><span style="color:#ADBAC7">)[[</span><span style="color:#6CB6FF">1</span><span style="color:#ADBAC7">]]</span></span>
+<span data-line=""><span style="color:#ADBAC7">    key </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> trimws</span><span style="color:#ADBAC7">(cookie[</span><span style="color:#6CB6FF">1</span><span style="color:#ADBAC7">])</span></span>
+<span data-line=""><span style="color:#ADBAC7">    value </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> trimws</span><span style="color:#ADBAC7">(cookie[</span><span style="color:#6CB6FF">2</span><span style="color:#ADBAC7">])</span></span>
+<span data-line=""><span style="color:#ADBAC7">    prev[[key]] </span><span style="color:#F47067">&#x3C;-</span><span style="color:#ADBAC7"> value</span></span>
+<span data-line=""><span style="color:#ADBAC7">    prev</span></span>
+<span data-line=""><span style="color:#ADBAC7">  }, cookies, </span><span style="color:#F69D50">init</span><span style="color:#F47067"> =</span><span style="color:#F47067"> list</span><span style="color:#ADBAC7">())</span></span>
+<span data-line=""><span style="color:#ADBAC7">}</span></span>
 <span data-line=""> </span>
 <span data-line=""><span style="color:#ADBAC7">ui </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> fluidPage</span><span style="color:#ADBAC7">(</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F69D50">  add_token_handler</span><span style="color:#ADBAC7">(),</span></span>
+<span data-line=""><span style="color:#F69D50">  add_token_handler</span><span style="color:#ADBAC7">(),</span></span>
 <span data-line=""><span style="color:#F69D50">  textOutput</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">"link"</span><span style="color:#ADBAC7">),</span></span>
 <span data-line=""><span style="color:#F69D50">  uiOutput</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">"pdf"</span><span style="color:#ADBAC7">)</span></span>
 <span data-line=""><span style="color:#ADBAC7">)</span></span>
 <span data-line=""> </span>
 <span data-line=""> </span>
 <span data-line=""><span style="color:#DCBDFB">server</span><span style="color:#F47067"> &#x3C;-</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(input, output, session) {</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">  token_obj </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> set_token</span><span style="color:#ADBAC7">(session)</span></span>
+<span data-line=""><span style="color:#ADBAC7">  salt </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> runif</span><span style="color:#ADBAC7">(</span><span style="color:#6CB6FF">1</span><span style="color:#ADBAC7">) </span><span style="color:#F47067">*</span><span style="color:#6CB6FF"> 1000</span><span style="color:#768390"> # Random value</span></span>
+<span data-line=""><span style="color:#ADBAC7">  token_obj </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> set_token</span><span style="color:#ADBAC7">(session, </span><span style="color:#F69D50">salt</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> salt)</span></span>
 <span data-line=""><span style="color:#ADBAC7">  example_get_data_url </span><span style="color:#F47067">&#x3C;-</span><span style="color:#ADBAC7"> session</span><span style="color:#F47067">$</span><span style="color:#F69D50">registerDataObj</span><span style="color:#ADBAC7">(</span></span>
 <span data-line=""><span style="color:#F69D50">    name</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> "example-get-api"</span><span style="color:#ADBAC7">,</span></span>
 <span data-line=""><span style="color:#F69D50">    data</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> {</span></span>
-<span data-line=""><span style="color:#768390">      # Fetch the example PDF content from the external link and save it as a temporary file</span></span>
+<span data-line=""><span style="color:#768390">      # Fetch the PDF content from the external link and save it as a temporary file</span></span>
 <span data-line=""><span style="color:#ADBAC7">      temp_pdf_path </span><span style="color:#F47067">&#x3C;-</span><span style="color:#6CB6FF"> tempfile</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">fileext</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> ".pdf"</span><span style="color:#ADBAC7">)</span></span>
 <span data-line=""><span style="color:#ADBAC7">      external_pdf_link </span><span style="color:#F47067">&#x3C;-</span><span style="color:#96D0FF"> 'https://www.africau.edu/images/default/sample.pdf'</span></span>
 <span data-line=""><span style="color:#6CB6FF">      download.file</span><span style="color:#ADBAC7">(external_pdf_link, temp_pdf_path, </span><span style="color:#F69D50">mode</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> "wb"</span><span style="color:#ADBAC7">)</span></span>
 <span data-line=""><span style="color:#6CB6FF">      readBin</span><span style="color:#ADBAC7">(temp_pdf_path, </span><span style="color:#96D0FF">"raw"</span><span style="color:#ADBAC7">, </span><span style="color:#6CB6FF">file.info</span><span style="color:#ADBAC7">(temp_pdf_path)</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">size)</span></span>
 <span data-line=""><span style="color:#ADBAC7">    },</span></span>
 <span data-line=""><span style="color:#DCBDFB">    filterFunc</span><span style="color:#F47067"> =</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(content, req) {</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#6CB6FF">      tryCatch</span><span style="color:#ADBAC7">({</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">        token </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> parse_cookies</span><span style="color:#ADBAC7">(req</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">HTTP_COOKIE)[[token_obj</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">key]]</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F69D50">        validate_session_jwt</span><span style="color:#ADBAC7">(token, session</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">token, </span><span style="color:#F69D50">salt</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> Sys.getenv</span><span style="color:#ADBAC7">(</span><span style="color:#96D0FF">'SHINY_SALT'</span><span style="color:#ADBAC7">))  </span><span style="color:#768390"># Throws an error if invalid</span></span>
+<span data-line=""><span style="color:#6CB6FF">      tryCatch</span><span style="color:#ADBAC7">({</span></span>
+<span data-line=""><span style="color:#ADBAC7">        token </span><span style="color:#F47067">&#x3C;-</span><span style="color:#F69D50"> parse_cookies</span><span style="color:#ADBAC7">(req</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">HTTP_COOKIE)[[token_obj</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">key]]</span></span>
+<span data-line=""><span style="color:#6CB6FF">        print</span><span style="color:#ADBAC7">(token)</span></span>
+<span data-line=""><span style="color:#F69D50">        validate_session_jwt</span><span style="color:#ADBAC7">(token, </span><span style="color:#F69D50">session_token</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> session</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">token, </span><span style="color:#F69D50">salt</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> salt)  </span><span style="color:#768390"># Throws an error if invalid</span></span>
 <span data-line=""><span style="color:#F69D50">        httpResponse</span><span style="color:#ADBAC7">(</span><span style="color:#6CB6FF">200</span><span style="color:#ADBAC7">, </span><span style="color:#96D0FF">"application/pdf"</span><span style="color:#ADBAC7">, content)</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">      },</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#DCBDFB">      error</span><span style="color:#F47067"> =</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(cond) {</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#F69D50">        httpResponse</span><span style="color:#ADBAC7">(</span><span style="color:#6CB6FF">403</span><span style="color:#ADBAC7">, </span><span style="color:#96D0FF">'text/plain'</span><span style="color:#ADBAC7">, </span><span style="color:#96D0FF">'not this time my friend'</span><span style="color:#ADBAC7">)</span></span>
-<span data-line="" data-highlighted-line=""><span style="color:#ADBAC7">      })</span></span>
+<span data-line=""><span style="color:#ADBAC7">      },</span></span>
+<span data-line=""><span style="color:#DCBDFB">      error</span><span style="color:#F47067"> =</span><span style="color:#F47067"> function</span><span style="color:#ADBAC7">(cond) {</span></span>
+<span data-line=""><span style="color:#F69D50">        httpResponse</span><span style="color:#ADBAC7">(</span><span style="color:#6CB6FF">403</span><span style="color:#ADBAC7">, </span><span style="color:#96D0FF">'text/plain'</span><span style="color:#ADBAC7">, </span><span style="color:#96D0FF">'not this time my friend'</span><span style="color:#ADBAC7">)</span></span>
+<span data-line=""><span style="color:#ADBAC7">      })</span></span>
 <span data-line=""><span style="color:#ADBAC7">    }</span></span>
 <span data-line=""><span style="color:#ADBAC7">  )</span></span>
 <span data-line=""> </span>
@@ -426,13 +441,9 @@ Think of it as a two-factor authentication mechanism, where the session URL is t
 <span data-line=""><span style="color:#ADBAC7">      example_get_data_url</span></span>
 <span data-line=""><span style="color:#ADBAC7">    )</span></span>
 <span data-line=""><span style="color:#ADBAC7">  })</span></span>
-<span data-line=""><span style="color:#ADBAC7">  </span></span>
-<span data-line=""><span style="color:#768390">  # read pdf from https://www.africau.edu/images/default/sample.pdf</span></span>
-<span data-line=""><span style="color:#ADBAC7">  pdfPath </span><span style="color:#F47067">&#x3C;-</span><span style="color:#96D0FF"> 'https://www.africau.edu/images/default/sample.pdf'</span></span>
-<span data-line=""><span style="color:#6CB6FF">  readBin</span><span style="color:#ADBAC7">(pdfPath, </span><span style="color:#96D0FF">"raw"</span><span style="color:#ADBAC7">, </span><span style="color:#6CB6FF">file.info</span><span style="color:#ADBAC7">(pdfPath)</span><span style="color:#F47067">$</span><span style="color:#ADBAC7">size)</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span>
 <span data-line=""> </span>
-<span data-line=""><span style="color:#F69D50">shinyApp</span><span style="color:#ADBAC7">(ui, server)</span></span></code></pre></figure>
+<span data-line=""><span style="color:#F69D50">shinyApp</span><span style="color:#ADBAC7">(ui, server, </span><span style="color:#F69D50">options</span><span style="color:#F47067"> =</span><span style="color:#F47067"> list</span><span style="color:#ADBAC7">(</span><span style="color:#F69D50">port</span><span style="color:#F47067"> =</span><span style="color:#6CB6FF"> 4444</span><span style="color:#ADBAC7">))</span></span></code></pre></figure>
 <p>Now, try to open the link in a separate incognito tab. If you see error 403 (or a ‘not this time my friend’ message 😁) it means that the token is invalid 👉 we’re good to go!
 <img alt="app_3"  src="/assets/asset.4BXDtO_E_Z2VEMt.webp" width="1140" height="496" loading="lazy" decoding="async"></p>
 <h2 id="conclusion"><a href="#conclusion">Conclusion</a></h2>
