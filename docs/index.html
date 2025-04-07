@@ -1,0 +1,249 @@
+<!DOCTYPE html><html class="theme-bubblegum" lang="en" data-astro-cid-3zbxo6iv> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Blogster"><meta name="theme-color" content="#ffffff"><!-- 
+  This is an example. 
+  Use https://realfavicongenerator.net to generate the icons and manifest. 
+--><link href="/favicon.ico" rel="shortcut icon"><!-- Primary Meta Tags --><title>Filip Akkad | Code 🤝 Business | AI</title><meta name="title" content="Filip Akkad | Code 🤝 Business | AI"><meta name="description" content="Developer blending finance expertise with coding skills and AI tools to create innovative solutions. Enthusiast of R/Shiny applications and adaptive technology approaches."><!-- Open Graph / Facebook --><meta property="og:title" content="Filip Akkad | Code 🤝 Business | AI"><meta property="og:description" content="Developer blending finance expertise with coding skills and AI tools to create innovative solutions. Enthusiast of R/Shiny applications and adaptive technology approaches."><meta property="og:type" content="website"><meta property="og:url" content="https://filipakkad.com"><meta property="og:image" content="https://filipakkad.com/images/og.png"><meta property="og:image:alt" content="Filip Akkad - Senior Software Developer"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><!-- Twitter --><meta property="twitter:title" content="Filip Akkad | Code 🤝 Business | AI"><meta property="twitter:description" content="Developer blending finance expertise with coding skills and AI tools to create innovative solutions. Enthusiast of R/Shiny applications and adaptive technology approaches."><meta property="twitter:site" content="@filipakkad"><meta property="twitter:creator" content="@filipakkad"><meta property="twitter:card" content="summary_large_image"><meta property="twitter:image" content="https://filipakkad.com/images/og.png"><meta property="twitter:image:alt" content="Filip Akkad - Senior Software Developer"><!-- {twitter.url && <meta property="twitter:url" content={twitter.url} />} --><!-- 
+    We don't want to use <link /> to load fonts from Google CDN 
+    but if you want to switch font this is the easiest way 
+    to check how your page will look with the new font.
+--><!-- 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&display=block"
+        rel="stylesheet"
+    />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;0,800;1,400&display=swap"
+        rel="stylesheet"
+    />
+--><link rel="preload" href="/fonts/space-grotesk-v13-latin-regular.woff2" as="font" type="font/woff2" crossorigin="crossorigin"><link rel="preload" href="/fonts/space-grotesk-v13-latin-700.woff2" as="font" type="font/woff2" crossorigin="crossorigin"><style>
+    /* space-grotesk-regular - latin */
+    @font-face {
+      font-family: "Space Grotesk";
+      font-style: normal;
+      font-weight: 400;
+      src: local(""),
+        url("/fonts/space-grotesk-v13-latin-regular.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url("/fonts/space-grotesk-v13-latin-regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    }
+    /* space-grotesk-700 - latin */
+    @font-face {
+      font-family: "Space Grotesk";
+      font-style: normal;
+      font-weight: 700;
+      src: local(""),
+        url("/fonts/space-grotesk-v13-latin-700.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url("/fonts/space-grotesk-v13-latin-700.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    }
+  </style><script>
+  // figure out user's preferred theme and set it as html class for tailwind before paint
+  (function () {
+    if (typeof window !== "undefined") {
+      const isSystemColorSchemeDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      const storageTheme = sessionStorage.getItem("theme");
+      if (!storageTheme && isSystemColorSchemeDark) {
+        document.documentElement.classList.add("dark");
+        document.head.children.namedItem("theme-color").content = "#0f172a";
+      } else if (storageTheme === "dark") {
+        document.documentElement.classList.add("dark");
+        document.head.children.namedItem("theme-color").content = "#0f172a";
+      } else {
+        // we already server render light theme
+        document.head.children.namedItem("theme-color").content = "#ffffff";
+      }
+    }
+  })();
+</script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+
+  // Global function to update consent status to granted
+  window.consentGranted = function () {
+    console.log("Consent granted for analytics");
+    // Update Google Analytics consent status
+    gtag("consent", "update", {
+      ad_storage: "granted",
+      analytics_storage: "granted",
+      functionality_storage: "granted",
+      personalization_storage: "granted",
+      security_storage: "granted",
+    });
+
+    // Notify Google Tag Manager of consent
+    dataLayer.push({
+      'event': 'cookie_consent_granted'
+    });
+  };
+
+  // Global function to explicitly deny consent
+  window.consentDenied = function () {
+    console.log("Consent denied for analytics");
+    // Update Google Analytics consent status to explicitly denied
+    gtag("consent", "update", {
+      ad_storage: "denied",
+      analytics_storage: "denied",
+      functionality_storage: "denied",
+      personalization_storage: "denied",
+      security_storage: "denied",
+    });
+
+    // Notify Google Tag Manager of denied consent
+    dataLayer.push({
+      'event': 'cookie_consent_denied'
+    });
+  };
+
+  // Returns value of the cookie-consent cookie
+  window.getCookieConsent = function () {
+    try {
+      const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('cookie-consent='))
+        ?.split('=')[1];
+
+      return cookieValue || "unk";
+    } catch (error) {
+      console.error("Error reading cookie consent:", error);
+      return "unk";
+    }
+  };
+
+  // Set default consent mode to denied until user provides consent
+  gtag("consent", "default", {
+    ad_storage: "denied",
+    analytics_storage: "denied",
+    functionality_storage: "denied",
+    personalization_storage: "denied",
+    security_storage: "denied",
+    wait_for_update: 500 // Wait for consent update
+  });
+
+  // Check if consent was previously set
+  const consentValue = window.getCookieConsent();
+  if (consentValue === "granted") {
+    // If cookies were previously approved, update consent status
+    console.log("Consent previously granted, updating settings");
+    window.consentGranted();
+  } else if (consentValue === "denied") {
+    // If cookies were previously denied, ensure settings reflect that
+    console.log("Consent previously denied, ensuring analytics is disabled");
+    window.consentDenied();
+  }
+</script> <!-- Google Tag Manager --><script>
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({
+      'gtm.start': new Date().getTime(),
+      event: 'gtm.js',
+      // Add consent state to dataLayer
+      'consent_state': window.getCookieConsent() === "granted" ? 'granted' : 'denied'
+    });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, 'script', 'dataLayer', 'GTM-PPLN2DMJ');
+</script> <!-- Cookie consent management --><script>
+  // Function to reset cookie consent and show the banner again
+  window.resetCookieConsent = function() {
+    // Delete the cookie
+    document.cookie = "cookie-consent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    // Reset consent to denied state in Google Analytics
+    if (typeof window.consentDenied === 'function') {
+      window.consentDenied();
+    }
+
+    // Reload the page to show the consent banner
+    location.reload();
+  }
+</script><style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var i=t=>{let e=async()=>{await(await t())()};"requestIdleCallback"in window?window.requestIdleCallback(e):setTimeout(e,200)};(self.Astro||(self.Astro={})).idle=i;window.dispatchEvent(new Event("astro:idle"));})();;(()=>{var b=Object.defineProperty;var f=(c,o,i)=>o in c?b(c,o,{enumerable:!0,configurable:!0,writable:!0,value:i}):c[o]=i;var l=(c,o,i)=>(f(c,typeof o!="symbol"?o+"":o,i),i);var p;{let c={0:t=>m(t),1:t=>i(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(i(t)),5:t=>new Set(i(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t)},o=t=>{let[e,r]=t;return e in c?c[e](r):void 0},i=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([e,r])=>[e,o(r)]));customElements.get("astro-island")||customElements.define("astro-island",(p=class extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var d;if(!this.hydrator||!this.isConnected)return;let e=(d=this.parentElement)==null?void 0:d.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),a={},h=this.querySelectorAll("template[data-astro-template]");for(let n of h){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("data-astro-template")||"default"]=n.innerHTML,n.remove())}for(let n of r){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("name")||"default"]=n.innerHTML)}let u;try{u=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(n){let s=this.getAttribute("component-url")||"<unknown>",y=this.getAttribute("component-export");throw y&&(s+=` (export ${y})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),n),n}await this.hydrator(this)(this.Component,u,a,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var a;((a=this.lastChild)==null?void 0:a.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}Astro[r](async()=>{let a=this.getAttribute("renderer-url"),[h,{default:u}]=await Promise.all([import(this.getAttribute("component-url")),a?import(a):()=>()=>{}]),d=this.getAttribute("component-export")||"default";if(!d.includes("."))this.Component=h[d];else{this.Component=h;for(let n of d.split("."))this.Component=this.Component[n]}return this.hydrator=u,this.hydrate},e,this)}attributeChangedCallback(){this.hydrate()}},l(p,"observedAttributes",["props"]),p))}})();</script><astro-island uid="ZoFxUo" prefix="r0" component-url="/assets/CookieConsent.RZbtWshL.js" component-export="CookieConsent" renderer-url="/assets/client.olTvLX7Y.js" props="{&quot;data-astro-cid-3zbxo6iv&quot;:[0,true]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;CookieConsent&quot;,&quot;value&quot;:true}"></astro-island><link rel="stylesheet" href="/assets/asset.M0VBs0gG.css" />
+<link rel="stylesheet" href="/assets/asset.vNqGgF_P.css" />
+<style>body{display:grid;grid-template-areas:"header" "main" "footer";grid-template-rows:5rem minmax(0,1fr) 5rem;grid-template-columns:minmax(0,1fr)}main[data-astro-cid-3zbxo6iv]{grid-area:main}
+</style><script type="module" src="/assets/hoisted.saVbuU36.js"></script></head> <body class="max-w-3xl mx-auto min-h-screen px-6 sm:px-8" data-astro-cid-3zbxo6iv> <!-- Google Tag Manager (noscript) --> <noscript> <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PPLN2DMJ" height="0" width="0" style="display:none;visibility:hidden" data-astro-cid-3zbxo6iv>
+        </iframe> </noscript> <!-- End Google Tag Manager (noscript) --> <header class="flex justify-between fixed w-full left-0 items-center backdrop-blur h-16 z-10" data-astro-cid-3ef6ksr2> <div class="flex justify-between mx-auto px-6 sm:px-8 w-full items-center  max-w-3xl" data-astro-cid-3ef6ksr2> <div class="w-fit" data-astro-cid-3ef6ksr2> <nav class="hidden md:flex w-fit" data-astro-cid-dmqpwcec><section class="text-text-bold w-fit" data-astro-cid-dmqpwcec><ul class="unset flex gap-4 [&>li]:p-0 w-fit" data-astro-cid-dmqpwcec><li data-astro-cid-dmqpwcec><!-- DO NOT FORMAT. IT ADDS AN EXTRA SPACE ON RENDERED CONTENT. --><a href="/" class="show unset animated-link" data-astro-cid-dmqpwcec>About me</a></li><li data-astro-cid-dmqpwcec><!-- DO NOT FORMAT. IT ADDS AN EXTRA SPACE ON RENDERED CONTENT. --><a href="/blog" class="unset animated-link" data-astro-cid-dmqpwcec>Blog</a></li><li data-astro-cid-dmqpwcec><!-- DO NOT FORMAT. IT ADDS AN EXTRA SPACE ON RENDERED CONTENT. --><a href="/contact" class="unset animated-link" data-astro-cid-dmqpwcec>Contact</a></li></ul></section></nav><nav class="md:hidden" data-astro-cid-dmqpwcec><button id="mobile-menu-open" data-astro-cid-dmqpwcec><i class="fa-solid fa-bars" aria-hidden="true" title="Open mobile menu" data-astro-cid-dmqpwcec></i><span class="fa-sr-only" data-astro-cid-dmqpwcec>Open mobile menu</span></button><section id="mobile-menu" class="hide-menu fixed top-0 left-0 h-[100dvh] z-20 w-full transition-transform bg-black/75 border-primary-blue" data-astro-cid-dmqpwcec><div class="bg-bg-body w-[75%] h-full drop-shadow-2xl" id="mobile-menu-body" data-astro-cid-dmqpwcec><button id="mobile-menu-close" class="px-6 h-[5rem] text-lg xml-[1px]" data-astro-cid-dmqpwcec><i class="fa-solid fa-xmark" aria-hidden="true" title="Close mobile menu" data-astro-cid-dmqpwcec></i><span class="fa-sr-only" data-astro-cid-dmqpwcec>Close mobile menu</span></button><ul class="unset flex flex-col text-text-bold gap-4 [&>li]:p-0 px-6" data-astro-cid-dmqpwcec><li data-astro-cid-dmqpwcec><!-- DO NOT FORMAT. IT ADDS AN EXTRA SPACE ON RENDERED CONTENT. --><a href="/" class="show unset animated-link" data-astro-cid-dmqpwcec>About me</a></li><li data-astro-cid-dmqpwcec><!-- DO NOT FORMAT. IT ADDS AN EXTRA SPACE ON RENDERED CONTENT. --><a href="/blog" class="unset animated-link" data-astro-cid-dmqpwcec>Blog</a></li><li data-astro-cid-dmqpwcec><!-- DO NOT FORMAT. IT ADDS AN EXTRA SPACE ON RENDERED CONTENT. --><a href="/contact" class="unset animated-link" data-astro-cid-dmqpwcec>Contact</a></li></ul></div></section></nav> </div> <div class="flex items-center" data-astro-cid-3ef6ksr2> <div class="justify-self-end py-2 flex items-center content-center text-text-bold" data-astro-cid-3ef6ksr2> <a class="unset ml-4 rounded-sm transition-[background-size] duration-150 ease-in-out bg-left-bottom bg-[length:0%_55%] hover:bg-[length:100%_55%] bg-no-repeat bg-gradient-to-r from-primary-yellow to-primary-yellow dark:bg-none dark:hover:text-primary-yellow" href="https://github.com/filipakkad" target="_blank" data-astro-cid-3ef6ksr2> <i class="fa-brands fa-github" aria-hidden="true" title="Filip on GitHub" data-astro-cid-3ef6ksr2></i> <span class="hidden md:inline" data-astro-cid-3ef6ksr2>GitHub</span> </a> <a class="unset ml-4 rounded-sm transition-[background-size] duration-150 bg-left-bottom bg-[length:0%_55%] hover:bg-[length:100%_55%] bg-no-repeat bg-gradient-to-r from-primary-blue to-primary-blue dark:bg-none dark:hover:text-primary-blue" href="https://linkedin.com/in/filip-akkad/" target="_blank" data-astro-cid-3ef6ksr2> <i class="fa-brands fa-linkedin" aria-hidden="true" title="Filip on LinkedIn" data-astro-cid-3ef6ksr2></i> <span class="hidden md:inline" data-astro-cid-3ef6ksr2>LinkedIn</span> </a> </div> <mode-toggle class="flex" data-astro-cid-tcsrer47> <button class="justify-self-end bg-black dark:bg-white ml-4 inline-flex h-6 w-11 items-center rounded-full" id="mode-toggle" role="switch" type="button" tabindex="0" aria-checked="false" data-headlessui-state="" data-astro-cid-tcsrer47><span class="sr-only" data-astro-cid-tcsrer47>Toggle dark mode</span><span id="mode-circle" class="light inline-block h-4 w-4 rounded-full bg-gradient-to-tr invisible" data-astro-cid-tcsrer47><span class="absolute top-0 right-0 w-[10px] h-[10px] rounded-full bg-gray-700 scale-[0]" data-astro-cid-tcsrer47></span> </span> </button> </mode-toggle>   </div> </div> </header>  <main id="main" class="prose max-w-none prose-bubblegum" data-astro-cid-3zbxo6iv>  <section class="mb-8"> <div class="mb-6 flex justify-between items-center flex-wrap"> <div class="relative group"> <img src="/assets/asset.PGwsuqgK_1lJpIL.webp" class="rounded-lg m-0 shadow-md hover:shadow-lg transition-all hover:-rotate-6 hover:!scale-110 duration-300 transition-all duration-300 group-hover:scale-[1.02]" alt="Filip Akkad - Senior Software Developer" width="300" height="300" loading="lazy" decoding="async"> </div> <h1 class="font-bold text-text-heading text-center text-4xl md:text-5xl pt-4 pb-2 overflow-hidden"> <span class="
+            animate-entry
+            bg-gradient-to-bl bg-no-repeat bg-bottom bg-[length:90%_40%]
+            from-primary-blue to-primary-blue dark:from-primary-blue dark:to-primary-blue
+        ">
+Filip Akkad
+</span> </h1> <p class="text-2xl pb-4 text-center w-full">Developer at the Intersection of Code, Finance & AI | React enthusiast</p> </div> </section> <div> <h1 id="where-finance-meets-code--ai-"><a href="#where-finance-meets-code--ai-">Where Finance Meets Code &#x26; AI ✨</a></h1>
+<p>Hey there! I’m <strong>Filip Akkad</strong> – a developer fascinated by the sweet spot where financial insight, code, and cutting-edge AI converge. My journey from quantitative finance to software development has been an exciting ride that’s given me a unique lens to view technical challenges.</p>
+<h2 id="professional-experience"><a href="#professional-experience">Professional Experience</a></h2>
+<h3 id="software-development-at-spoton"><a href="#software-development-at-spoton">Software Development at SpotOn</a></h3>
+<p>At SpotOn, I craft solutions using:</p>
+<ul>
+<li><strong>TypeScript</strong> and <strong>JavaScript</strong></li>
+<li><strong>React.js</strong> (with ♡) for slick, responsive UIs</li>
+<li><strong>Python</strong> and <strong>Node.js</strong> for powerful backends</li>
+</ul>
+<p>I’m all about understanding the business problem first, then bringing the right tech tools to the table – whether that’s traditional coding or leveraging the latest AI capabilities.</p>
+<h3 id="ai-integration-enthusiast"><a href="#ai-integration-enthusiast">AI Integration Enthusiast</a></h3>
+<p>I’m genuinely excited about how AI is transforming development. On a daily basis, I:</p>
+<ul>
+<li>Collaborate with AI tools to accelerate development workflows</li>
+<li>Use AI-assisted coding while maintaining a deep understanding of the underlying principles</li>
+<li>Stay on the cutting edge of AI capabilities and how they can enhance business solutions</li>
+<li>Boost productivity with new tools without losing sight of the importance of human oversight</li>
+</ul>
+<p>Business first :)</p>
+<h3 id="financial-analysis-roots"><a href="#financial-analysis-roots">Financial Analysis Roots</a></h3>
+<p>My career began in the financial sector as an Investment Analyst, where I worked on:</p>
+<ul>
+<li>Cash flow modeling for investment evaluation</li>
+<li>Financial data analysis for decision support</li>
+<li>Quantitative tools for portfolio assessment</li>
+</ul>
+<p>This foundation in finance gives me a practical perspective on how technology can deliver real business value.</p>
+<h2 id="r-programming--data-visualization"><a href="#r-programming--data-visualization">R Programming &#x26; Data Visualization</a></h2>
+<p>I’ve developed a genuine passion for R programming and its applications:</p>
+<ul>
+<li><strong>R/Shiny Applications</strong>: Creating interactive dashboards that transform complex data into visual insights</li>
+<li><strong>Data Analysis</strong>: Applying quantitative methods to solve real business problems</li>
+<li><strong>Reporting Solutions</strong>: Building tools that empower teams to make data-driven decisions</li>
+</ul>
+<h3 id="open-source-contributions"><a href="#open-source-contributions">Open Source Contributions</a></h3>
+<p>I’ve contributed to the R community through projects like:</p>
+<ul>
+<li><strong>react-shiny-template</strong>: A framework connecting React frontends with R/Shiny backends</li>
+<li><strong>shiny.blueprint</strong>: An implementation of Blueprint components for Shiny applications</li>
+</ul>
+<p>These projects reflect my belief in making powerful data analysis accessible through intuitive interfaces.</p>
+<h2 id="adaptable-across-industries"><a href="#adaptable-across-industries">Adaptable Across Industries</a></h2>
+<p>I’ve enjoyed working across diverse industries:</p>
+<ul>
+<li><strong>Pharmaceutical</strong>: Navigating complex regulatory requirements while delivering effective solutions</li>
+<li><strong>Real Estate</strong>: Creating financial models that drive investment decisions</li>
+<li><strong>Finance</strong>: Developing tools that provide analytical clarity</li>
+</ul>
+<p>What makes this cross-industry experience exciting is the opportunity to adapt and apply tools and techniques in different contexts – finding the right approach for each unique challenge.</p>
+<h3 id="collaborative-problem-solving"><a href="#collaborative-problem-solving">Collaborative Problem-Solving</a></h3>
+<p>As a freelancer, I’ve partnered with clients on various projects:</p>
+<ul>
+<li>Financial modeling with a tech twist</li>
+<li>Interactive data visualization dashboards</li>
+<li>Custom applications that solve specific business challenges</li>
+</ul>
+<p>I thrive in collaborative environments where we can explore problems together and find the most elegant solutions – whether that involves traditional coding, AI assistance, or a combination of approaches.</p>
+<h2 id="education"><a href="#education">Education</a></h2>
+<p>My degree in <strong>Quantitative Finance</strong> gave me solid foundations in:</p>
+<ul>
+<li>Financial modeling</li>
+<li>Statistical analysis</li>
+<li>Economic principles</li>
+</ul>
+<p>This background, combined with my ongoing tech exploration, helps me bridge the gap between business needs and technical implementation.</p>
+<h2 id="lets-connect"><a href="#lets-connect">Let’s Connect</a></h2>
+<p>I’m always up for discussing cool projects, sharing ideas about AI and development, or exploring how technology can solve interesting business challenges. I believe in finding the right balance between innovation and practicality.</p>
+<p>You can find me on <a href="https://github.com/filipakkad">GitHub</a> and <a href="https://www.linkedin.com/in/filip-akkad/">LinkedIn</a>, or reach out through the <a href="/contact">contact page</a>.</p>
+<p>Looking forward to connecting!</p> </div>  </main> <footer class="text-sm leading-[1.75] mt-4" data-astro-cid-sz7xmlte> <div class="flex flex-col items-center justify-center gap-1" data-astro-cid-sz7xmlte> <p client:visible data-astro-cid-sz7xmlte>
+All rights reserved © Filip Akkad 2025 </p> <div class="flex gap-4 text-xs text-gray-500 dark:text-gray-400" data-astro-cid-sz7xmlte> <a href="/privacy-policy" class="hover:text-gray-700 dark:hover:text-gray-300 transition-colors" data-astro-cid-sz7xmlte>Privacy Policy</a> <button onclick="window.resetCookieConsent && window.resetCookieConsent()" class="hover:text-gray-700 dark:hover:text-gray-300 transition-colors cursor-pointer" data-astro-cid-sz7xmlte>
+Cookie Settings
+</button> </div> </div> </footer>   </body> </html>
